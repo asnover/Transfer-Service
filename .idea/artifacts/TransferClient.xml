@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TransferClient">
+    <output-path>$USER_HOME$/Documents/Artifacts/TransferArtifacts</output-path>
+    <root id="archive" name="TransferClient.jar">
+      <element id="module-output" name="TranferGroup.Client.main" />
+      <element id="file-copy" path="$PROJECT_DIR$/Client/src/main/resources/config.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/Client/src/main/resources/data.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/Client/src/main/resources/paper-plugin.yml" />
+    </root>
+  </artifact>
+</component>

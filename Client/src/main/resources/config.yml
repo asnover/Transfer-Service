@@ -1,0 +1,13 @@
+#WARNING! This plugin does not offer compatibility for other worlds besides the normal vanilla overworld!
+#Changes made to the server's normal world functionality will break this plugin! Compatibility will be coming in the future
+
+#Forces the player to spawn at the same specified spawn point on every login.
+forcedspawn: false
+#The spawn point for forced spawn. The format is x-y-z and is in whole numbers
+spawn: 0-4-0
+#This will be where you put your secret key. This is an added layer of security in order to prevent others from logging
+#into your server via their own methods. Put it here and do not share it with others.
+secret: 'SecretKeyHere'
+#This list is here for reference to a list of server coordinate data sets.
+#If this list is gone or if a server is removed, data for that server will not be loaded and may be removed.
+servers:

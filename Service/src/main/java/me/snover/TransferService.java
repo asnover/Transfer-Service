@@ -7,8 +7,10 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
+import me.snover.config.CompositeConfiguration;
 import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 /**
@@ -21,6 +23,7 @@ public class TransferService {
     private final ProxyServer SERVER;
     private final Logger LOGGER;
     private final Path DATA_DIRECTORY;
+    private CompositeConfiguration config;
 
     /**
      * Constructs the plugin
@@ -47,6 +50,11 @@ public class TransferService {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         SERVER.getEventManager().register(this, new MessageReceivedHandler(this));
         SERVER.getChannelRegistrar().register(MinecraftChannelIdentifier.create("transfers", "main"));
+        try {
+            config = new CompositeConfiguration(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

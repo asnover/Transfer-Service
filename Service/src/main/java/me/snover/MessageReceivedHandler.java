@@ -6,6 +6,7 @@ import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.proxy.ConnectionRequestBuilder;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+import me.snover.config.CompositeConfiguration;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -30,7 +31,7 @@ public class MessageReceivedHandler {
 
         if(id.equalsIgnoreCase("transfers:main")) {
             String key = in.readUTF();
-            if(!key.equals("SecretKeyHere")) {
+            if(!key.equals(CompositeConfiguration.getSecret())) {
                 PLUGIN.getLogger().warn("Received mismatched key! Rejecting the plugin message.");
                 return;
             }

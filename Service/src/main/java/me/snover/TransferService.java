@@ -55,6 +55,7 @@ public class TransferService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        config.load();
     }
 
     /**

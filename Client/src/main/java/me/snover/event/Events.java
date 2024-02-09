@@ -78,6 +78,10 @@ public class Events implements Listener {
         if(playerLock.contains(player)) unlock(player);
     }
 
+    /**
+     * Allow the playerMoveEvent to be executed again for the specified player
+     * @param player Player to release from the lock
+     */
     public static void unlock(Player player) {
         playerLock.remove(player);
     }

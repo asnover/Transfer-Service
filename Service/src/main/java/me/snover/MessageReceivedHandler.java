@@ -24,17 +24,23 @@ public class MessageReceivedHandler {
 
     }
 
+    /**
+     * When a plugin message is received, process and transfer the player.
+     * @param event
+     */
     @Subscribe()
     public void onMessageReceived(PluginMessageEvent event) {
         String id = event.getIdentifier().getId();
         ByteArrayDataInput in = event.dataAsDataStream();
 
         if(id.equalsIgnoreCase("transfers:main")) {
+            //Check if key is valid
             String key = in.readUTF();
             if(!key.equals(CompositeConfiguration.getSecret())) {
                 PLUGIN.getLogger().warn("Received mismatched key! Rejecting the plugin message.");
                 return;
             }
+            //Start transfer process
             String request = in.readUTF();
             if(request.equalsIgnoreCase("transfer")) {
                 String serverName = in.readUTF();
@@ -42,6 +48,7 @@ public class MessageReceivedHandler {
                 RegisteredServer server = PLUGIN.getServer().getServer(serverName).get();
                 Player player = PLUGIN.getServer().getPlayer(playerName).get();
 
+                //Forward player connection to specified server
                 ConnectionRequestBuilder conReq = player.createConnectionRequest(server);
                 CompletableFuture<ConnectionRequestBuilder.Result> result = conReq.connect();
                 try {

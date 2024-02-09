@@ -15,7 +15,7 @@ import java.nio.file.Path;
 
 /**
  * Main class for the Transfer Service plugin
- * @since 1.0.0
+ * @since 1.0.1
  * @author Adam Snover
  */
 @Plugin(id = "transferservice", name = "Transfer Service", version = "1.1.0", description = "A service for client servers interacting with the proxy", authors = {"Adam Snover"})
@@ -32,9 +32,6 @@ public class TransferService {
      * @param dataDirectory The data directory for the plugin to use
      */
 
-    //TODO Make secret key changeable
-    //TODO Perform code cleanup
-    //TODO Optimize imports across plugin
     @Inject
     public TransferService(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
         SERVER = server;

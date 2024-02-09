@@ -27,6 +27,11 @@ public class CompositeTransferConfiguration {
         this.plugin = plugin;
     }
 
+    /**
+     * Loads coordinate and configuration data
+     * @param loadConfig Set to {@code true} to load the configuration
+     * @param loadCoords Set to {@code true} to load coordinate data
+     */
     public void loadResources(boolean loadConfig, boolean loadCoords) {
         //load config file
         if (loadConfig) {
@@ -64,6 +69,7 @@ public class CompositeTransferConfiguration {
                 if (dataFile == null) {
                     dataFile = new File(plugin.getDataFolder(), "data.yml");
                     if (!dataFile.exists())  {
+                        //If no data file exists, create one
                         plugin.saveResource("data.yml", false);
                     }
                 }
@@ -84,13 +90,20 @@ public class CompositeTransferConfiguration {
     }
 
 
+    /**
+     * Saves coordinate and configuration data
+     * @param saveConfig Set to {@code true} to save current configuration settings
+     * @param saveCoords Set to {@code true} to save current coordinate data
+     */
     @SuppressWarnings("CallToPrintStackTrace")
     public void saveResources(boolean saveConfig, boolean saveCoords) {
+        //Save config file
         if(saveConfig) {
             if(config == null || configFile == null) {
                 plugin.getLogger().warning("Cannot save a null configuration!");
                 return;
             }
+            //Begin actual saving process
             Location loc = ResourceOptions.spawnLocation;
             String pos = loc.getBlockX() + "-" + loc.getBlockY() + "-" + loc.getBlockZ();
             config.set("forcedspawn", ResourceOptions.forcedSpawn);
@@ -104,12 +117,14 @@ public class CompositeTransferConfiguration {
             }
         }
 
+        //Save coordinate data
         if(saveCoords) {
             if(data == null || dataFile == null) {
                 plugin.getLogger().warning("Cannot save a null data configuration!");
                 return;
             }
 
+            //Begin actual saving process
             if(!data.isConfigurationSection("coordinatecontainers")) {
                 data.createSection("coordinatecontainers");
             }
@@ -126,13 +141,5 @@ public class CompositeTransferConfiguration {
                 e.printStackTrace();
             }
         }
-    }
-
-    public FileConfiguration getConfig() {
-        return config;
-    }
-
-    public FileConfiguration getData() {
-        return data;
     }
 }

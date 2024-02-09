@@ -1,6 +1,5 @@
 package me.snover.command;
 
-import me.snover.ColorPalette;
 import me.snover.TransferClient;
 import me.snover.config.CompositeTransferConfiguration;
 import me.snover.config.ResourceOptions;
@@ -9,7 +8,7 @@ import me.snover.pointer.CoordinateContainer;
 import me.snover.pointer.CoordinateServerRegistry;
 import me.snover.pointer.CoordinateSet;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -23,15 +22,16 @@ import java.util.List;
  */
 public class CommandTransfer extends Command {
 
-    final Component USAGE = Component.text("Usage:\n/transfer register\n/transfer listservers\n/transfer remserver\n/transfer showcoord\n/transfer remcoord\n/transfer test\n/transfer setspawn\n/transfer toggleforcedspawn", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB()));
-    final Component REGISTER_USAGE = Component.text("Usage: /transfer register <server> <x> <y> <z> (Coordinates optional when used in-game. Server name is case sensitive!)", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB()));
-    final Component REMSERVER_USAGE = Component.text("Usage: /transfer remserver <server>", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB()));
-    final Component SHOWCOORD_USAGE = Component.text("Usage: /transfer showcoord <server>", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB()));
-    final Component REMCOORD_USAGE = Component.text("Usage: /transfer remcoord <server> <x> <y> <z>", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB()));
-    final Component TEST_USAGE = Component.text("Usage: /transfer test <server> <player>", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB()));
-    final Component SET_SPAWN_USAGE = Component.text("Usage: /transfer setspawn <x> <y> <z> (coordinates optional when used in-game)", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB()));
-    final Component SERVER_NOT_FOUND = Component.text("Server not not found in registry!", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB()));
-    final Component DISALLOW = Component.text("Not Allowed!", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB()));
+    //Commonly used messages
+    final Component USAGE = Component.text("Usage:\n/transfer register\n/transfer listservers\n/transfer remserver\n/transfer showcoord\n/transfer remcoord\n/transfer test\n/transfer setspawn\n/transfer toggleforcedspawn", NamedTextColor.DARK_RED);
+    final Component REGISTER_USAGE = Component.text("Usage: /transfer register <server> <x> <y> <z> (Coordinates optional when used in-game. Server name is case sensitive!)", NamedTextColor.DARK_RED);
+    final Component REMSERVER_USAGE = Component.text("Usage: /transfer remserver <server>", NamedTextColor.DARK_RED);
+    final Component SHOWCOORD_USAGE = Component.text("Usage: /transfer showcoord <server>", NamedTextColor.DARK_RED);
+    final Component REMCOORD_USAGE = Component.text("Usage: /transfer remcoord <server> <x> <y> <z>", NamedTextColor.DARK_RED);
+    final Component TEST_USAGE = Component.text("Usage: /transfer test <server> <player>", NamedTextColor.DARK_RED);
+    final Component SET_SPAWN_USAGE = Component.text("Usage: /transfer setspawn <x> <y> <z> (coordinates optional when used in-game)", NamedTextColor.DARK_RED);
+    final Component SERVER_NOT_FOUND = Component.text("Server not found in registry!", NamedTextColor.DARK_RED);
+    final Component DISALLOW = Component.text("Not Allowed!", NamedTextColor.DARK_RED);
 
     @SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
     private CompositeTransferConfiguration config;
@@ -81,7 +81,7 @@ public class CommandTransfer extends Command {
         }
 
         String tgtServer = args[1];
-        //Begin registration process for 2 arguments
+        //Begin registration process for 2 arguments, disallow if the sender is not a player
         if(args.length == 2) {
             if(sender instanceof Player player) {
                 if(!player.isOp()) {
@@ -96,7 +96,7 @@ public class CommandTransfer extends Command {
                 int x = player.getLocation().getBlockX();
                 int y = player.getLocation().getBlockY();
                 int z = player.getLocation().getBlockZ();
-                sender.sendMessage(Component.text("Registering a new coordinate set:" + "\nx: " + x + "\ny: " + y + "\nz: " + z, TextColor.color(ColorPalette.AQUA.getR(), ColorPalette.AQUA.getG(), ColorPalette.AQUA.getB())));
+                sender.sendMessage(Component.text("Registering a new coordinate set:" + "\nx: " + x + "\ny: " + y + "\nz: " + z, NamedTextColor.AQUA));
                 container.addCoordinateSet(x, y, z);
                 CoordinateServerRegistry.add(tgtServer, container);
                 if(!ResourceOptions.servers.contains(tgtServer)) ResourceOptions.servers.add(tgtServer);
@@ -116,7 +116,7 @@ public class CommandTransfer extends Command {
                 y = Integer.parseInt(args[3]);
                 z = Integer.parseInt(args[4]);
             } catch(NumberFormatException e) {
-                sender.sendMessage(Component.text("Coordinates must contain only whole numbers!\n" + REGISTER_USAGE, TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB())));
+                sender.sendMessage(Component.text("Coordinates must contain only whole numbers!\n" + REGISTER_USAGE, NamedTextColor.DARK_RED));
                 return false;
             }
 
@@ -135,21 +135,27 @@ public class CommandTransfer extends Command {
         return false;
     }
 
+    /**
+     * Gives the command sender a list of registered servers.
+     * @param sender The command sender
+     * @return Returns {@code true} if command successful
+     */
     @SuppressWarnings("SameReturnValue")
     private boolean executeListServers(CommandSender sender) {
         final List<String> REG = CoordinateServerRegistry.getRegisteredServers();
         int regSize = REG.size();
         if(regSize < 1) {
-            sender.sendMessage(Component.text("No servers registered.", TextColor.color(ColorPalette.AQUA.getR(), ColorPalette.AQUA.getG(), ColorPalette.AQUA.getB())));
+            sender.sendMessage(Component.text("No servers registered.", NamedTextColor.AQUA));
             return true;
         }
 
+        //Building the server list
         StringBuilder builder = new StringBuilder();
         builder.append("Servers:");
         for(int i = 0; i < regSize; i++) {
             builder.append("\n").append(REG.get(i));
         }
-        sender.sendMessage(Component.text(builder.toString(), TextColor.color(ColorPalette.AQUA.getR(), ColorPalette.AQUA.getG(), ColorPalette.AQUA.getB())));
+        sender.sendMessage(Component.text(builder.toString(), NamedTextColor.AQUA));
         return true;
     }
 
@@ -205,7 +211,7 @@ public class CommandTransfer extends Command {
             int setNumber = i + 1;
             builder.append("\nCoordinate Set ").append(setNumber).append(": ").append(coordinateSets[i].getX()).append(", ").append(coordinateSets[i].getY()).append(", ").append(coordinateSets[i].getZ());
         }
-        sender.sendMessage(Component.text(builder.toString(), TextColor.color(ColorPalette.AQUA.getR(), ColorPalette.AQUA.getG(), ColorPalette.AQUA.getB())));
+        sender.sendMessage(Component.text(builder.toString(), NamedTextColor.AQUA));
         return true;
     }
 
@@ -228,7 +234,7 @@ public class CommandTransfer extends Command {
         }
         CoordinateServerRegistry.getContainer(args[1]).removeCoordinateSet(Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
         config.saveResources(false, true);
-        sender.sendMessage(Component.text("Removed coordinate set for server: " + args[1], TextColor.color(ColorPalette.AQUA.getR(), ColorPalette.AQUA.getG(), ColorPalette.AQUA.getB())));
+        sender.sendMessage(Component.text("Removed coordinate set for server: " + args[1], NamedTextColor.AQUA));
         return true;
     }
 
@@ -251,8 +257,9 @@ public class CommandTransfer extends Command {
         }
         String server = args[1];
         Player tgtPlayer = TransferClient.getPlugin().getServer().getPlayerExact(args[2]);
+        //May need to investigate warning of possible NullPointerException return.
         if(!tgtPlayer.isOnline()) {
-            sender.sendMessage(Component.text("Player is not online!", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB())));
+            sender.sendMessage(Component.text("Player is not online!", NamedTextColor.DARK_RED));
             return false;
         }
 
@@ -267,11 +274,13 @@ public class CommandTransfer extends Command {
      * @return Returns {@code true} if command successful
      */
     public boolean executeSetSpawn(CommandSender sender, String[] args) {
+        //If sender is not player, check if there are enough arguments.
         if(!(sender instanceof Player player)) {
             if(args.length < 4) {
                 sender.sendMessage(SET_SPAWN_USAGE);
                 return false;
             }
+            //Begin execution of command
             int x;
             int y;
             int z;
@@ -281,21 +290,23 @@ public class CommandTransfer extends Command {
                 y = Integer.parseInt(args[2]);
                 z = Integer.parseInt(args[3]);
             } catch(NumberFormatException e) {
-                sender.sendMessage(Component.text("Coordinates must be whole numbers!", TextColor.color(ColorPalette.DARK_RED.getR(), ColorPalette.DARK_RED.getG(), ColorPalette.DARK_RED.getB())));
+                sender.sendMessage(Component.text("Coordinates must be whole numbers!", NamedTextColor.DARK_RED));
                 return false;
             }
             ResourceOptions.spawnLocation = new Location(TransferClient.getPlugin().getServer().getWorld("world"), x, y, z);
             config.saveResources(true, false);
-            sender.sendMessage(Component.text("Spawn-point set", TextColor.color(ColorPalette.AQUA.getR(), ColorPalette.AQUA.getG(), ColorPalette.AQUA.getB())));
+            sender.sendMessage(Component.text("Spawn-point set.", NamedTextColor.AQUA));
             return true;
         }
+
+        //If sender is player and arguments do not have coordinates, execute.
         if(!player.isOp()) {
             player.sendMessage(DISALLOW);
             return false;
         }
         ResourceOptions.spawnLocation = player.getLocation();
         config.saveResources(true, false);
-        sender.sendMessage(Component.text("Spawn-point set", TextColor.color(ColorPalette.AQUA.getR(), ColorPalette.AQUA.getG(), ColorPalette.AQUA.getB())));
+        sender.sendMessage(Component.text("Spawn-point set.", NamedTextColor.AQUA));
         return true;
     }
 
@@ -312,10 +323,10 @@ public class CommandTransfer extends Command {
         }
         if(!ResourceOptions.forcedSpawn) {
             ResourceOptions.forcedSpawn = true;
-            sender.sendMessage(Component.text("Enabled forced spawning", TextColor.color(ColorPalette.AQUA.getR(), ColorPalette.AQUA.getG(), ColorPalette.AQUA.getB())));
+            sender.sendMessage(Component.text("Enabled forced spawning", NamedTextColor.AQUA));
         } else {
             ResourceOptions.forcedSpawn = false;
-            sender.sendMessage(Component.text("Disabled forced spawning", TextColor.color(ColorPalette.AQUA.getR(), ColorPalette.AQUA.getG(), ColorPalette.AQUA.getB())));
+            sender.sendMessage(Component.text("Disabled forced spawning", NamedTextColor.AQUA));
         }
         config.saveResources(true, false);
         return true;

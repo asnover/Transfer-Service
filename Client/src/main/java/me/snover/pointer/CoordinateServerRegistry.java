@@ -42,6 +42,7 @@ public class CoordinateServerRegistry {
     public static void add(CoordinateContainer container) {
         add(container.getServerName(), container);
     }
+
     /**
     * Removes a coordinate container for a server
      */

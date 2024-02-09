@@ -61,6 +61,7 @@ public class TransferClient extends JavaPlugin {
     @Nullable
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> tabList = new ArrayList<>();
+        //TODO Finish Tab Suggestions
         if(command.getName().equalsIgnoreCase("transfer")) {
             switch (args[0]) {
                 case "yes":
@@ -78,9 +79,5 @@ public class TransferClient extends JavaPlugin {
      */
     public static Plugin getPlugin() {
         return plugin;
-    }
-
-    public static CompositeTransferConfiguration getTransferConfig() {
-        return config;
     }
 }

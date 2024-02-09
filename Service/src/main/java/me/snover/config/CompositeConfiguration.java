@@ -24,8 +24,8 @@ public class CompositeConfiguration {
 
     /**
      * Constructs the class for the TOML configuration. If the file does not exist, one will be created.
-     * @param plugin
-     * @throws IOException
+     * @param plugin The Transfer plugin itself
+     * @throws IOException Throws IOException when the file cannot be extracted or saved
      */
     public CompositeConfiguration(TransferService plugin) throws IOException {
         //Init

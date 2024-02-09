@@ -26,7 +26,7 @@ public class MessageReceivedHandler {
 
     /**
      * When a plugin message is received, process and transfer the player.
-     * @param event
+     * @param event Handles the {@link PluginMessageEvent}
      */
     @Subscribe()
     public void onMessageReceived(PluginMessageEvent event) {

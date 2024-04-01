@@ -3,12 +3,14 @@ package me.snover.command;
 import me.snover.TransferClient;
 import me.snover.config.CompositeTransferConfiguration;
 import me.snover.config.ResourceOptions;
+import me.snover.event.Events;
 import me.snover.messaging.PluginMessageSender;
 import me.snover.pointer.CoordinateContainer;
 import me.snover.pointer.CoordinateServerRegistry;
 import me.snover.pointer.CoordinateSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -23,7 +25,7 @@ import java.util.List;
 public class CommandTransfer extends Command {
 
     //Commonly used messages
-    final Component USAGE = Component.text("Usage:\n/transfer register\n/transfer listservers\n/transfer remserver\n/transfer showcoord\n/transfer remcoord\n/transfer test\n/transfer setspawn\n/transfer toggleforcedspawn", NamedTextColor.DARK_RED);
+    final Component USAGE = Component.text("Usage:\n/transfer register\n/transfer edit-mode\n/transfer listservers\n/transfer remserver\n/transfer showcoord\n/transfer remcoord\n/transfer test\n/transfer setspawn\n/transfer toggleforcedspawn", NamedTextColor.DARK_RED);
     final Component REGISTER_USAGE = Component.text("Usage: /transfer register <server> <x> <y> <z> (Coordinates optional when used in-game. Server name is case sensitive!)", NamedTextColor.DARK_RED);
     final Component REMSERVER_USAGE = Component.text("Usage: /transfer remserver <server>", NamedTextColor.DARK_RED);
     final Component SHOWCOORD_USAGE = Component.text("Usage: /transfer showcoord <server>", NamedTextColor.DARK_RED);
@@ -55,6 +57,7 @@ public class CommandTransfer extends Command {
             return false;
         }
         if(args[0].equalsIgnoreCase("register")) return executeRegister(sender, args);
+        if(args[0].equalsIgnoreCase("edit-mode")) return executeEditMode(sender);
         if(args[0].equalsIgnoreCase("listservers")) return executeListServers(sender);
         if(args[0].equalsIgnoreCase("remserver")) return executeRemServer(sender, args);
         if(args[0].equalsIgnoreCase("showcoord")) return executeShowCoord(sender, args);
@@ -323,12 +326,34 @@ public class CommandTransfer extends Command {
         }
         if(!ResourceOptions.forcedSpawn) {
             ResourceOptions.forcedSpawn = true;
-            sender.sendMessage(Component.text("Enabled forced spawning", NamedTextColor.AQUA));
+            sender.sendMessage(Component.text("Enabled forced spawning.", NamedTextColor.AQUA));
         } else {
             ResourceOptions.forcedSpawn = false;
-            sender.sendMessage(Component.text("Disabled forced spawning", NamedTextColor.AQUA));
+            sender.sendMessage(Component.text("Disabled forced spawning.", NamedTextColor.AQUA));
         }
         config.saveResources(true, false);
         return true;
+    }
+
+    private boolean executeEditMode(CommandSender sender) {
+        if(sender instanceof Player player) {
+            if(!player.isOp()) {
+                player.sendMessage(DISALLOW);
+                return false;
+            }
+
+            if(Events.isPlayerEditing(player)) {
+                Events.addEditingPlayer(player);
+                player.sendMessage(Component.text("Entered edit-mode.", NamedTextColor.AQUA));
+                return true;
+            } else {
+                Events.removeEditingPlayer(player);
+                player.sendMessage(Component.text("Exited edit-mode.", NamedTextColor.AQUA));
+                return true;
+            }
+        } else {
+            sender.sendMessage(Component.text("You must be a player to enter edit mode.", NamedTextColor.DARK_RED, TextDecoration.BOLD));
+            return false;
+        }
     }
 }

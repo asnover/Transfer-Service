@@ -1,4 +1,4 @@
 name: TransferClient
-version: 1.0.1
+version: 1.0.2
 main: me.snover.TransferClient
 api-version: '1.20'

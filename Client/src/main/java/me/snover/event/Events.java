@@ -24,6 +24,7 @@ import java.util.List;
 public class Events implements Listener {
 
     private static final List<Player> playerLock = new ArrayList<>();
+    private static final List<Player> editingPlayer = new ArrayList<>();
 
     /**
      * This event decides whether to send the player to a server or not based on any matches made in the {@link CoordinateServerRegistry}
@@ -35,6 +36,7 @@ public class Events implements Listener {
         if(ResourceOptions.servers.isEmpty()) return;
         Player player = event.getPlayer();
         if(playerLock.contains(player)) return;
+        if(editingPlayer.contains(player)) return;
         int playerX = player.getLocation().getBlockX();
         int playerY = player.getLocation().getBlockY();
         int playerZ = player.getLocation().getBlockZ();
@@ -84,5 +86,19 @@ public class Events implements Listener {
      */
     public static void unlock(Player player) {
         playerLock.remove(player);
+    }
+
+    public static void addEditingPlayer(Player player) {
+        if(!editingPlayer.contains(player)) {
+            editingPlayer.add(player);
+        }
+    }
+
+    public static void removeEditingPlayer(Player player) {
+        editingPlayer.remove(player);
+    }
+
+    public static boolean isPlayerEditing(Player player) {
+        return editingPlayer.contains(player);
     }
 }

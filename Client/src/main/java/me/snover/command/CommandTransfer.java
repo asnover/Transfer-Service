@@ -342,7 +342,7 @@ public class CommandTransfer extends Command {
                 return false;
             }
 
-            if(Events.isPlayerEditing(player)) {
+            if(!Events.isPlayerEditing(player)) {
                 Events.addEditingPlayer(player);
                 player.sendMessage(Component.text("Entered edit-mode.", NamedTextColor.AQUA));
                 return true;

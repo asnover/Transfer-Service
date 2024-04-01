@@ -25,15 +25,15 @@ import java.util.List;
 public class CommandTransfer extends Command {
 
     //Commonly used messages
-    final Component USAGE = Component.text("Usage:\n/transfer register\n/transfer edit-mode\n/transfer listservers\n/transfer remserver\n/transfer showcoord\n/transfer remcoord\n/transfer test\n/transfer setspawn\n/transfer toggleforcedspawn", NamedTextColor.DARK_RED);
-    final Component REGISTER_USAGE = Component.text("Usage: /transfer register <server> <x> <y> <z> (Coordinates optional when used in-game. Server name is case sensitive!)", NamedTextColor.DARK_RED);
-    final Component REMSERVER_USAGE = Component.text("Usage: /transfer remserver <server>", NamedTextColor.DARK_RED);
-    final Component SHOWCOORD_USAGE = Component.text("Usage: /transfer showcoord <server>", NamedTextColor.DARK_RED);
-    final Component REMCOORD_USAGE = Component.text("Usage: /transfer remcoord <server> <x> <y> <z>", NamedTextColor.DARK_RED);
-    final Component TEST_USAGE = Component.text("Usage: /transfer test <server> <player>", NamedTextColor.DARK_RED);
-    final Component SET_SPAWN_USAGE = Component.text("Usage: /transfer setspawn <x> <y> <z> (coordinates optional when used in-game)", NamedTextColor.DARK_RED);
-    final Component SERVER_NOT_FOUND = Component.text("Server not found in registry!", NamedTextColor.DARK_RED);
-    final Component DISALLOW = Component.text("Not Allowed!", NamedTextColor.DARK_RED);
+    final Component USAGE = Component.text("Usage:\n/transfer register\n/transfer edit-mode\n/transfer listservers\n/transfer remserver\n/transfer showcoord\n/transfer remcoord\n/transfer test\n/transfer setspawn\n/transfer toggleforcedspawn", NamedTextColor.RED);
+    final Component REGISTER_USAGE = Component.text("Usage: /transfer register <server> <x> <y> <z> (Coordinates optional when used in-game. Server name is case sensitive!)", NamedTextColor.RED);
+    final Component REMSERVER_USAGE = Component.text("Usage: /transfer remserver <server>", NamedTextColor.RED);
+    final Component SHOWCOORD_USAGE = Component.text("Usage: /transfer showcoord <server>", NamedTextColor.RED);
+    final Component REMCOORD_USAGE = Component.text("Usage: /transfer remcoord <server> <x> <y> <z>", NamedTextColor.RED);
+    final Component TEST_USAGE = Component.text("Usage: /transfer test <server> <player>", NamedTextColor.RED);
+    final Component SET_SPAWN_USAGE = Component.text("Usage: /transfer setspawn <x> <y> <z> (coordinates optional when used in-game)", NamedTextColor.RED);
+    final Component SERVER_NOT_FOUND = Component.text("Server not found in registry!", NamedTextColor.RED);
+    final Component DISALLOW = Component.text("Not Allowed!", NamedTextColor.RED);
 
     @SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
     private CompositeTransferConfiguration config;
@@ -119,7 +119,7 @@ public class CommandTransfer extends Command {
                 y = Integer.parseInt(args[3]);
                 z = Integer.parseInt(args[4]);
             } catch(NumberFormatException e) {
-                sender.sendMessage(Component.text("Coordinates must contain only whole numbers!\n" + REGISTER_USAGE, NamedTextColor.DARK_RED));
+                sender.sendMessage(Component.text("Coordinates must contain only whole numbers!\n" + REGISTER_USAGE, NamedTextColor.RED));
                 return false;
             }
 
@@ -293,7 +293,7 @@ public class CommandTransfer extends Command {
                 y = Integer.parseInt(args[2]);
                 z = Integer.parseInt(args[3]);
             } catch(NumberFormatException e) {
-                sender.sendMessage(Component.text("Coordinates must be whole numbers!", NamedTextColor.DARK_RED));
+                sender.sendMessage(Component.text("Coordinates must be whole numbers!", NamedTextColor.RED));
                 return false;
             }
             ResourceOptions.spawnLocation = new Location(TransferClient.getPlugin().getServer().getWorld("world"), x, y, z);
@@ -335,6 +335,11 @@ public class CommandTransfer extends Command {
         return true;
     }
 
+    /**
+     * Toggle edit mode to prevent players from teleporting while editing teleportation points.
+     * @param sender
+     * @return
+     */
     private boolean executeEditMode(CommandSender sender) {
         if(sender instanceof Player player) {
             if(!player.isOp()) {
@@ -352,7 +357,7 @@ public class CommandTransfer extends Command {
                 return true;
             }
         } else {
-            sender.sendMessage(Component.text("You must be a player to enter edit mode.", NamedTextColor.DARK_RED, TextDecoration.BOLD));
+            sender.sendMessage(Component.text("You must be a player to enter edit mode.", NamedTextColor.RED, TextDecoration.BOLD));
             return false;
         }
     }

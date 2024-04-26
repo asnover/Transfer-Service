@@ -49,7 +49,7 @@ public class CompositeTransferConfiguration {
                 config = YamlConfiguration.loadConfiguration(configFile);
                 ResourceOptions.forcedSpawn = config.getBoolean("forcedspawn");
                 //TODO Later on, change this to a serialized org.bukkit.Location
-                String[] spawnString = config.getString("spawn").split("-");
+                String[] spawnString = config.getString("spawn").split(" ");
                 for (String s : spawnString) {
                     plugin.getLogger().info(s);
                 }
@@ -105,7 +105,7 @@ public class CompositeTransferConfiguration {
             }
             //Begin actual saving process
             Location loc = ResourceOptions.spawnLocation;
-            String pos = loc.getBlockX() + "-" + loc.getBlockY() + "-" + loc.getBlockZ();
+            String pos = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
             config.set("forcedspawn", ResourceOptions.forcedSpawn);
             config.set("spawn", pos);
             config.set("servers", ResourceOptions.servers);

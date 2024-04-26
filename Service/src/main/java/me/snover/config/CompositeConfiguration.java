@@ -71,7 +71,7 @@ public class CompositeConfiguration {
     }
 
     /**
-     * Read the TOML file on the disk and save the settings. Any settings currently loaded will be overwritten.
+     * Read the TOML file on the disk and save the settings. Any settings currently loaded into memory will be overwritten.
      */
     public void load() {
         SECRET_TOML = new Toml().read(SECRET_TOML_FILE);

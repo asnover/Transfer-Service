@@ -15,7 +15,7 @@ import java.nio.file.Path;
 
 /**
  * Main class for the Transfer Service plugin
- * @since 1.0.1
+ * @since 1.0.5
  * @author Adam Snover
  */
 @Plugin(id = "transferservice", name = "Transfer Service", version = "1.1.0", description = "A service for client servers interacting with the proxy", authors = {"Adam Snover"})

@@ -87,7 +87,7 @@ public class CommandTransfer extends Command {
         //Begin registration process for 2 arguments, disallow if the sender is not a player
         if(args.length == 2) {
             if(sender instanceof Player player) {
-                if(!player.isOp()) {
+                if(!player.isOp() && !player.hasPermission("transferclient.transfer.register")) {
                     player.sendMessage(DISALLOW);
                     return false;
                 }
@@ -145,6 +145,12 @@ public class CommandTransfer extends Command {
      */
     @SuppressWarnings("SameReturnValue")
     private boolean executeListServers(CommandSender sender) {
+        if(sender instanceof Player player) {
+            if(!player.isOp() && !player.hasPermission("transferclient.transfer.listeservers")) {
+                player.sendMessage(DISALLOW);
+                return false;
+            }
+        }
         final List<String> REG = CoordinateServerRegistry.getRegisteredServers();
         int regSize = REG.size();
         if(regSize < 1) {
@@ -170,7 +176,7 @@ public class CommandTransfer extends Command {
      */
     private boolean executeRemServer(CommandSender sender, String[] args) {
         if(sender instanceof Player player) {
-            if (!player.isOp()) {
+            if (!player.isOp() && ! player.hasPermission("transferclient.transfer.remserver")) {
                 player.sendMessage(DISALLOW);
                 return false;
             }
@@ -197,6 +203,13 @@ public class CommandTransfer extends Command {
      * @return Returns {@code true} if command successful
      */
     private boolean executeShowCoord(CommandSender sender, String[] args) {
+        if(sender instanceof Player player) {
+            if(!player.isOp() && !player.hasPermission("transferclient.transfer.showcoord")) {
+                player.sendMessage(DISALLOW);
+                return false;
+            }
+        }
+
         if(args.length < 2) {
             sender.sendMessage(SHOWCOORD_USAGE);
             return false;
@@ -226,7 +239,7 @@ public class CommandTransfer extends Command {
      */
     private boolean executeRemCoord(CommandSender sender, String[] args) {
         if(sender instanceof Player player) {
-            if (!player.isOp()) {
+            if (!player.isOp() && !player.hasPermission("transferclient.transfer.remcoord")) {
                 player.sendMessage(DISALLOW);
                 return false;
             }
@@ -242,14 +255,14 @@ public class CommandTransfer extends Command {
     }
 
     /**
-     * Executes the test portion of the transfer command
+     * Executes the test portion of the transfer command for debugging purposes
      * @param sender The command sender
      * @param args The command arguments (Arguments MUST NOT be modified)
      * @return Returns {@code true} if command successful
      */
     private boolean executeTest(CommandSender sender, String[] args) {
         if(sender instanceof Player player) {
-            if (!player.isOp()) {
+            if (!player.isOp() && !player.hasPermission("transferclient.transfer.test")) {
                 player.sendMessage(DISALLOW);
                 return false;
             }
@@ -303,7 +316,7 @@ public class CommandTransfer extends Command {
         }
 
         //If sender is player and arguments do not have coordinates, execute.
-        if(!player.isOp()) {
+        if(!player.isOp() && !player.hasPermission("transferclient.transfer.setspawn")) {
             player.sendMessage(DISALLOW);
             return false;
         }
@@ -319,7 +332,7 @@ public class CommandTransfer extends Command {
      */
     private boolean executeToggleForcedSpawn(CommandSender sender) {
         if(sender instanceof Player player) {
-            if (!player.isOp()) {
+            if (!player.isOp() && !player.hasPermission("transferclient.transfer.toggleforcedspawn")) {
                 player.sendMessage(DISALLOW);
                 return false;
             }
@@ -337,12 +350,12 @@ public class CommandTransfer extends Command {
 
     /**
      * Toggle edit mode to prevent players from teleporting while editing teleportation points.
-     * @param sender
-     * @return
+     * @param sender The command sender
+     * @return Returns {@code true} of command successful
      */
     private boolean executeEditMode(CommandSender sender) {
         if(sender instanceof Player player) {
-            if(!player.isOp()) {
+            if(!player.isOp() && !player.hasPermission("transferclient.transfer.editmode")) {
                 player.sendMessage(DISALLOW);
                 return false;
             }

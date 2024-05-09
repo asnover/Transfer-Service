@@ -1,5 +1,15 @@
 #WARNING! This plugin does not offer compatibility for other worlds besides the normal vanilla overworld!
 #Changes made to the server's normal world functionality will break this plugin! Compatibility will be coming in the future
+#Permission list for the transfer command:
+# transferclient.transfer.register
+# transferclient.transfer.listservers
+# transferclient.transfer.remserver
+# transferclient.transfer.showcoord
+# transferclient.transfer.remcoord
+# transferclient.transfer.test
+# transferclient.transfer.setspawn
+# transferclient.transfer.toggleforcedspawn
+# transferclient.transfer.editmode
 
 #Forces the player to spawn at the same specified spawn point on every login.
 forcedspawn: false

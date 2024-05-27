@@ -7,6 +7,7 @@ import com.velocitypowered.api.proxy.ConnectionRequestBuilder;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import me.snover.config.CompositeConfiguration;
+import net.kyori.adventure.text.Component;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +54,15 @@ public class MessageReceivedHandler {
                 CompletableFuture<ConnectionRequestBuilder.Result> result = conReq.connect();
                 try {
                     if(!result.get().isSuccessful()) {
-                        PLUGIN.getLogger().warn("Attempted to connect " + playerName + " to " + serverName + " but the attempt was unsuccessful");
+                        PLUGIN.getLogger().error("Attempted to connect " + playerName + " to " + serverName + " but the attempt was unsuccessful");
+                        Component reason;
+                        if(result.get().getReasonComponent().isPresent()) {
+                            reason = result.get().getReasonComponent().get();
+                            player.sendMessage(reason);
+                            PLUGIN.getLogger().error(reason.toString());
+                        } else {
+                            PLUGIN.getLogger().error("No further information");
+                        }
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     PLUGIN.getLogger().error("Error upon getting result for player connection! \n(Player was " + playerName + ")\n(Server was " + serverName + ")\n(Current server is " + player.getCurrentServer().get().getServerInfo().getName() + ")");

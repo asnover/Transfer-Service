@@ -50,16 +50,13 @@ public class CompositeTransferConfiguration {
                 ResourceOptions.forcedSpawn = config.getBoolean("forcedspawn");
                 //TODO Later on, change this to a serialized org.bukkit.Location
                 String[] spawnString = config.getString("spawn").split(" ");
-                for (String s : spawnString) {
-                    plugin.getLogger().info(s);
-                }
+
                 int x = Integer.parseInt(spawnString[0]);
                 int y = Integer.parseInt(spawnString[1]);
                 int z = Integer.parseInt(spawnString[2]);
 
-                ResourceOptions.spawnLocation = new Location(plugin.getServer().getWorld("world"), x, y, z);
+                ResourceOptions.spawnLocation = new Location(plugin.getServer().getWorlds().get(0), x, y, z);
                 ResourceOptions.secretKey = config.getString("secret");
-                ResourceOptions.servers = config.getStringList("servers");
             }
         }
 
@@ -108,7 +105,6 @@ public class CompositeTransferConfiguration {
             String pos = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
             config.set("forcedspawn", ResourceOptions.forcedSpawn);
             config.set("spawn", pos);
-            config.set("servers", ResourceOptions.servers);
             try {
                 config.save(configFile);
             } catch (IOException e) {
@@ -130,9 +126,11 @@ public class CompositeTransferConfiguration {
             }
 
             ConfigurationSection containerSection = data.getConfigurationSection("coordinatecontainers");
-            for(String server : ResourceOptions.servers) {
+
+            for(String server : CoordinateServerRegistry.getRegisteredServers()) {
                 containerSection.set(server, CoordinateServerRegistry.getContainer(server));
             }
+
             try {
                 Preconditions.checkNotNull(containerSection);
                 data.save(dataFile);
@@ -141,5 +139,11 @@ public class CompositeTransferConfiguration {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void removeSubsection(String server) {
+        if(!data.isConfigurationSection("coordinatecontainers")) return;
+        ConfigurationSection containerSection = data.getConfigurationSection("coordinatecontainers");
+        containerSection.set(server, null);
     }
 }

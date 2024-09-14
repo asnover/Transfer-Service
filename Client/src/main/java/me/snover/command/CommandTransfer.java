@@ -102,8 +102,7 @@ public class CommandTransfer extends Command {
                 sender.sendMessage(Component.text("Registering a new coordinate set:" + "\nx: " + x + "\ny: " + y + "\nz: " + z, NamedTextColor.AQUA));
                 container.addCoordinateSet(x, y, z);
                 CoordinateServerRegistry.add(tgtServer, container);
-                if(!ResourceOptions.servers.contains(tgtServer)) ResourceOptions.servers.add(tgtServer);
-                config.saveResources(true, true);
+                config.saveResources(false, true);
                 return true;
             }
         }
@@ -176,7 +175,7 @@ public class CommandTransfer extends Command {
      */
     private boolean executeRemServer(CommandSender sender, String[] args) {
         if(sender instanceof Player player) {
-            if (!player.isOp() && ! player.hasPermission("transferclient.transfer.remserver")) {
+            if (!player.isOp() && !player.hasPermission("transferclient.transfer.remserver")) {
                 player.sendMessage(DISALLOW);
                 return false;
             }
@@ -190,9 +189,7 @@ public class CommandTransfer extends Command {
             return false;
         }
         CoordinateServerRegistry.remove(args[1]);
-        ResourceOptions.servers.remove(args[1]);
         config.saveResources(true, true);
-        TransferClient.getPlugin().getLogger().info("Removed " + args[1]);
         return true;
     }
 
@@ -309,7 +306,7 @@ public class CommandTransfer extends Command {
                 sender.sendMessage(Component.text("Coordinates must be whole numbers!", NamedTextColor.RED));
                 return false;
             }
-            ResourceOptions.spawnLocation = new Location(TransferClient.getPlugin().getServer().getWorld("world"), x, y, z);
+            ResourceOptions.spawnLocation = new Location(TransferClient.getPlugin().getServer().getWorlds().get(0), x, y, z);
             config.saveResources(true, false);
             sender.sendMessage(Component.text("Spawn-point set.", NamedTextColor.AQUA));
             return true;

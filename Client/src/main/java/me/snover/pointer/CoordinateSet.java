@@ -1,7 +1,7 @@
 package me.snover.pointer;
 
 /**
- * This class is a representation of a location in the overworld by use of its coordinates
+ * This class is a representation of a location in the world by use of its coordinates after being deserialized.
  */
 public class CoordinateSet {
     private final int X;

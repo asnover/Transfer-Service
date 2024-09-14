@@ -52,6 +52,8 @@ public class CoordinateServerRegistry {
             for(String currentServer : REG_SERVERS) {
                 if(currentServer.equals(server)) {
                     REG_SERVERS.remove(server);
+                    TransferClient.getPlugin().getLogger().info("Removed " + server);
+                    TransferClient.getCompositeConfig().removeSubsection(server);
                     break;
                 }
             }

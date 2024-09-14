@@ -80,4 +80,7 @@ public class TransferClient extends JavaPlugin {
     public static Plugin getPlugin() {
         return plugin;
     }
+    public static CompositeTransferConfiguration getCompositeConfig() {
+        return config;
+    }
 }

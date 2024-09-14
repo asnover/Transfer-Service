@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class ResourceOptions {
     public static volatile boolean forcedSpawn = false;
-    public static volatile Location spawnLocation = new Location(TransferClient.getPlugin().getServer().getWorld("world"), 0.500d, 4.0d, 0.500d);
-    public static volatile List<String> servers = new ArrayList<>();
+    public static volatile Location spawnLocation = new Location(TransferClient.getPlugin().getServer().getWorlds().get(0), 0.500d, 4.0d, 0.500d); //new Location(TransferClient.getPlugin().getServer().getWorld("world"), 0.500d, 4.0d, 0.500d);
     public static volatile String secretKey = null;
 }

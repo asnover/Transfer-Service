@@ -10,6 +10,7 @@ Plugin features:
 After setting up your servers and configuring your proxy in your `velocity.toml` file, you will then be able set up your "portals." The way portals work is that when a player walks onto a given location, it will automatically forward said player to the server that the portal is assigned to.
 
 To register a set of coordinates to forward a player when they walk onto them, if you are logged into the server, you must first go into edit-mode using `/transfer edit-mode` to prevent you from teleporting while registering where new coordinate sets.
+
 ![Screenshot of transfer edit](https://i.imgur.com/UdDeaaa.png)
 
 Then you can use the `/transfer register` command to register the coordinates that you are currently standing on. You MUST use the name of the server that you used in the `velocity.toml` file. You also have the option of typing in the coordinates yourself. You may add the coordinates manually through the console if you wish.
@@ -61,6 +62,3 @@ Features to come in the future:
 - [ ] Allow more world teleportation options than just the overworld and the default world folder.
 - [ ] Add Redis support
 - [ ] Add SQL support
-
-Known Issues:
-- The command `/transfer remserver` will not fully delete data from `data.yml` and must be manually removed.

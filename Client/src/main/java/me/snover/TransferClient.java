@@ -1,19 +1,14 @@
 package me.snover;
 
 import me.snover.command.CommandTransfer;
+import me.snover.command.TransferTabCompleter;
 import me.snover.config.CompositeTransferConfiguration;
 import me.snover.event.Events;
 import me.snover.pointer.CoordinateContainer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //TODO List of things to implements in version 1.1.0
 //TODO If plugin messaging isn't already ASync, make it so if plausible
@@ -44,6 +39,8 @@ public class TransferClient extends JavaPlugin {
         if(getServer().getCommandMap().register("transfer", "", commandTransfer)) getLogger().info("Transfer command registered successfully");
         else getLogger().severe("Transfer command failed to register!");
 
+        PluginCommand transferCommand = getCommand("transfer");
+        transferCommand.setTabCompleter(new TransferTabCompleter());
 
         getLogger().warning("This plugin does not offer compatibility for other worlds besides the normal vanilla overworld! Changes made to the server's normal world functionality will break this plugin! Compatibility will be coming in the future.");
     }
@@ -52,25 +49,6 @@ public class TransferClient extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Saving resources...");
         config.saveResources(true, true);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Nullable
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        List<String> tabList = new ArrayList<>();
-        //TODO Finish Tab Suggestions
-        if(command.getName().equalsIgnoreCase("transfer")) {
-            switch (args[0]) {
-                case "yes":
-                    if(args[1].equalsIgnoreCase("register")) {
-
-                }
-            }
-        }
-        return null;
     }
 
     /**

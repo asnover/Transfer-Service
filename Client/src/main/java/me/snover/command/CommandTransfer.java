@@ -50,6 +50,7 @@ public class CommandTransfer extends Command {
      * @param args All arguments passed to the command, split via ' '
      * @return Returns true if command executes successfully.
      */
+    @Deprecated(since = "15 September 2024")
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
         if(args.length < 1) {

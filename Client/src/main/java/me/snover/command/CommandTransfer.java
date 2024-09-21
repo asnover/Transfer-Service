@@ -17,7 +17,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -311,7 +310,7 @@ public class CommandTransfer extends Command {
                 sender.sendMessage(Component.text("Coordinates must be whole numbers!", NamedTextColor.RED));
                 return false;
             }
-            ResourceOptions.spawnLocation = new Location(TransferClient.getPlugin().getServer().getWorlds().get(0), x, y, z);
+            ResourceOptions.spawnLocation = new Location(TransferClient.getPlugin().getServer().getWorlds().getFirst(), x, y, z);
             config.saveResources(true, false);
             sender.sendMessage(Component.text("Spawn-point set.", NamedTextColor.AQUA));
             return true;

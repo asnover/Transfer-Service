@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -49,13 +50,13 @@ public class CompositeTransferConfiguration {
                 config = YamlConfiguration.loadConfiguration(configFile);
                 ResourceOptions.forcedSpawn = config.getBoolean("forcedspawn");
                 //TODO Later on, change this to a serialized org.bukkit.Location
-                String[] spawnString = config.getString("spawn").split(" ");
+                @SuppressWarnings("DataFlowIssue") String[] spawnString = config.getString("spawn").split(" ");
 
                 int x = Integer.parseInt(spawnString[0]);
                 int y = Integer.parseInt(spawnString[1]);
                 int z = Integer.parseInt(spawnString[2]);
 
-                ResourceOptions.spawnLocation = new Location(plugin.getServer().getWorlds().get(0), x, y, z);
+                ResourceOptions.spawnLocation = new Location(plugin.getServer().getWorlds().getFirst(), x, y, z);
                 ResourceOptions.secretKey = config.getString("secret");
             }
         }
@@ -127,8 +128,10 @@ public class CompositeTransferConfiguration {
 
             ConfigurationSection containerSection = data.getConfigurationSection("coordinatecontainers");
 
-            for(String server : CoordinateServerRegistry.getRegisteredServers()) {
-                containerSection.set(server, CoordinateServerRegistry.getContainer(server));
+            for(String server : Objects.requireNonNull(CoordinateServerRegistry.getRegisteredServers())) {
+                if (containerSection != null) {
+                    containerSection.set(server, CoordinateServerRegistry.getContainer(server));
+                }
             }
 
             try {
@@ -144,6 +147,8 @@ public class CompositeTransferConfiguration {
     public void removeSubsection(String server) {
         if(!data.isConfigurationSection("coordinatecontainers")) return;
         ConfigurationSection containerSection = data.getConfigurationSection("coordinatecontainers");
-        containerSection.set(server, null);
+        if (containerSection != null) {
+            containerSection.set(server, null);
+        }
     }
 }

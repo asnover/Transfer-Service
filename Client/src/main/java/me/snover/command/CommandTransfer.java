@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class handles everything for the transfer command
@@ -151,7 +152,7 @@ public class CommandTransfer extends Command {
                 return false;
             }
         }
-        final List<String> REG = CoordinateServerRegistry.getRegisteredServers();
+        final Set<String> REG = CoordinateServerRegistry.getRegisteredServers();
         int regSize = REG.size();
         if(regSize < 1) {
             sender.sendMessage(Component.text("No servers registered.", NamedTextColor.AQUA));
@@ -161,9 +162,12 @@ public class CommandTransfer extends Command {
         //Building the server list
         StringBuilder builder = new StringBuilder();
         builder.append("Servers:");
-        for(int i = 0; i < regSize; i++) {
-            builder.append("\n").append(REG.get(i));
+        for(String server : REG) {
+            builder.append("\n").append(server);
         }
+        /*for(int i = 0; i < regSize; i++) {
+            builder.append("\n").append(REG.);
+        }*/
         sender.sendMessage(Component.text(builder.toString(), NamedTextColor.AQUA));
         return true;
     }

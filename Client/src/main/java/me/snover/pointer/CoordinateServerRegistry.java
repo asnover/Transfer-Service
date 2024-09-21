@@ -5,6 +5,7 @@ import me.snover.TransferClient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class CoordinateServerRegistry {
 
@@ -59,10 +60,10 @@ public class CoordinateServerRegistry {
      * Get a list of all registered servers
      * @return Returns a {@link List} of registered servers
      */
-    public static List<String> getRegisteredServers() {
+    public static Set<String> getRegisteredServers() {
         int size = COORDINATE_SERVER_REG.size();
         if(size < 1) return null;
-        return (List<String>) COORDINATE_SERVER_REG.keySet();
+        return COORDINATE_SERVER_REG.keySet();
     }
 
     /**

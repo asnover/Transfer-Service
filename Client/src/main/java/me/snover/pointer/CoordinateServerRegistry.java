@@ -9,7 +9,7 @@ import java.util.List;
 public class CoordinateServerRegistry {
 
     private static final HashMap<String, CoordinateContainer> COORDINATE_SERVER_REG = new HashMap<>();
-    private static final List<String> REG_SERVERS = new ArrayList<>();
+
 
     /**
      * Adds a coordinate container for a server. This method can also be used to update/overwrite an existing container
@@ -20,22 +20,6 @@ public class CoordinateServerRegistry {
         //First, we register the container
         COORDINATE_SERVER_REG.put(server, container);
         TransferClient.getPlugin().getLogger().info("New coordinate/server association registered");
-
-        //Check if any servers have been registered yet. If not, then register
-        if(REG_SERVERS.isEmpty()) {
-            REG_SERVERS.add(server);
-            return;
-        }
-
-        //Check to see if the server has been registered yet.
-        boolean exists = false;
-        for(String currentServer : REG_SERVERS) {
-            if(currentServer.equals(server))  {
-                exists = true;
-                break;
-            }
-        }
-        if(!exists) REG_SERVERS.add(server);
     }
 
     @Deprecated(forRemoval = true)
@@ -49,14 +33,8 @@ public class CoordinateServerRegistry {
     public static void remove(String server) {
         if(COORDINATE_SERVER_REG.containsKey(server)) {
             COORDINATE_SERVER_REG.remove(server);
-            for(String currentServer : REG_SERVERS) {
-                if(currentServer.equals(server)) {
-                    REG_SERVERS.remove(server);
-                    TransferClient.getPlugin().getLogger().info("Removed " + server);
-                    TransferClient.getCompositeConfig().removeSubsection(server);
-                    break;
-                }
-            }
+            TransferClient.getCompositeConfig().removeSubsection(server);
+            TransferClient.getPlugin().getLogger().info("Removed " + server);
         }
     }
 
@@ -82,7 +60,9 @@ public class CoordinateServerRegistry {
      * @return Returns a {@link List} of registered servers
      */
     public static List<String> getRegisteredServers() {
-        return REG_SERVERS;
+        int size = COORDINATE_SERVER_REG.size();
+        if(size < 1) return null;
+        return (List<String>) COORDINATE_SERVER_REG.keySet();
     }
 
     /**

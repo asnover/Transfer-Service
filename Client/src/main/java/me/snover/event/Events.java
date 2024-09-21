@@ -32,6 +32,7 @@ public class Events implements Listener {
     @SuppressWarnings("JavadocDeclaration")
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent event) {
+        //noinspection DataFlowIssue
         if(CoordinateServerRegistry.getRegisteredServers().isEmpty()) return;
         Player player = event.getPlayer();
         if(playerLock.contains(player)) return;

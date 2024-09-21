@@ -15,10 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO List of things to implements in version 1.1.0
-//TODO If plugin messaging isn't already ASync, make it so if plausible
+//TODO List of things to implements in version 1.1.3
 //TODO Either implement serialization for locations and save them or associate coordinate sets with worlds.
-//TODO Finish onTabComplete
 public class TransferClient extends JavaPlugin {
 
     private static JavaPlugin plugin;

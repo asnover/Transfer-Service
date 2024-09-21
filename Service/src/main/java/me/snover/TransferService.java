@@ -18,7 +18,7 @@ import java.nio.file.Path;
  * @since 1.0.0
  * @author Adam Snover
  */
-@Plugin(id = "transferservice", name = "Transfer Service", version = "1.1.2", description = "A service for client servers interacting with the proxy", authors = {"Adam Snover"})
+@Plugin(id = "transferservice", name = "Transfer Service", version = "1.1.3", description = "A service for client servers interacting with the proxy", authors = {"Adam Snover"})
 public class TransferService {
     private final ProxyServer SERVER;
     private final Logger LOGGER;
@@ -59,7 +59,7 @@ public class TransferService {
      *
      * @return Returns the proxy server
      */
-    public ProxyServer getServer() {
+    public ProxyServer getProxyServer() {
         return SERVER;
     }
 

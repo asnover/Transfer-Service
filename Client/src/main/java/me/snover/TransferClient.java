@@ -4,16 +4,9 @@ import me.snover.command.CommandTransfer;
 import me.snover.config.CompositeTransferConfiguration;
 import me.snover.event.Events;
 import me.snover.pointer.CoordinateContainer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //TODO List of things to implements in version 1.1.3
 //TODO Either implement serialization for locations and save them or associate coordinate sets with worlds.
@@ -50,25 +43,6 @@ public class TransferClient extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Saving resources...");
         config.saveResources(true, true);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Nullable
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        List<String> tabList = new ArrayList<>();
-        //TODO Finish Tab Suggestions
-        if(command.getName().equalsIgnoreCase("transfer")) {
-            switch (args[0]) {
-                case "yes":
-                    if(args[1].equalsIgnoreCase("register")) {
-
-                }
-            }
-        }
-        return null;
     }
 
     /**

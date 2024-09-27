@@ -111,6 +111,7 @@ public class CoordinateContainer implements ConfigurationSerializable {
         return data;
     }
 
+    @SuppressWarnings("unused")
     @NotNull
     public static CoordinateContainer deserialize(Map<String, Object> data) {
         CoordinateContainer container = new CoordinateContainer((String) data.get("server"));

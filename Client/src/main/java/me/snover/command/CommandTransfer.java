@@ -152,8 +152,7 @@ public class CommandTransfer extends Command {
             }
         }
         final Set<String> REG = CoordinateServerRegistry.getRegisteredServers();
-        int regSize = REG.size();
-        if(regSize < 1) {
+        if(REG.isEmpty()) {
             sender.sendMessage(Component.text("No servers registered.", NamedTextColor.AQUA));
             return true;
         }

@@ -1,6 +1,6 @@
-package me.snover.pointer;
+package me.snover.paper.pointer;
 
-import me.snover.TransferClient;
+import me.snover.paper.TransferClient;
 
 import java.util.HashMap;
 import java.util.List;

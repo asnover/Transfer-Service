@@ -1,4 +1,4 @@
-package me.snover.pointer;
+package me.snover.spigot.pointer;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.Utility;

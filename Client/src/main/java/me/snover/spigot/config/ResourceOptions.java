@@ -1,6 +1,6 @@
-package me.snover.config;
+package me.snover.spigot.config;
 
-import me.snover.TransferClient;
+import me.snover.spigot.TransferClient;
 import org.bukkit.Location;
 
 /**

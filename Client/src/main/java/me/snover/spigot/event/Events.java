@@ -1,11 +1,11 @@
-package me.snover.event;
+package me.snover.spigot.event;
 
-import me.snover.TransferClient;
-import me.snover.config.ResourceOptions;
-import me.snover.messaging.PluginMessageSender;
-import me.snover.pointer.CoordinateContainer;
-import me.snover.pointer.CoordinateServerRegistry;
-import me.snover.pointer.CoordinateSet;
+import me.snover.spigot.TransferClient;
+import me.snover.spigot.config.ResourceOptions;
+import me.snover.spigot.messaging.PluginMessageSender;
+import me.snover.spigot.pointer.CoordinateContainer;
+import me.snover.spigot.pointer.CoordinateServerRegistry;
+import me.snover.spigot.pointer.CoordinateSet;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

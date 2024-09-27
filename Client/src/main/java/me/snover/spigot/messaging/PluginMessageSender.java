@@ -1,8 +1,8 @@
-package me.snover.messaging;
+package me.snover.spigot.messaging;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import me.snover.config.ResourceOptions;
+import me.snover.spigot.config.ResourceOptions;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 

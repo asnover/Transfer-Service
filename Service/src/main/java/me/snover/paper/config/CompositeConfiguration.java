@@ -1,7 +1,7 @@
-package me.snover.config;
+package me.snover.paper.config;
 
 import com.moandjiezana.toml.Toml;
-import me.snover.TransferService;
+import me.snover.paper.TransferService;
 
 import java.io.*;
 import java.net.JarURLConnection;

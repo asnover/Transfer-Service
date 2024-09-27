@@ -1,13 +1,13 @@
-package me.snover.command;
+package me.snover.spigot.command;
 
-import me.snover.TransferClient;
-import me.snover.config.CompositeTransferConfiguration;
-import me.snover.config.ResourceOptions;
-import me.snover.event.Events;
-import me.snover.messaging.PluginMessageSender;
-import me.snover.pointer.CoordinateContainer;
-import me.snover.pointer.CoordinateServerRegistry;
-import me.snover.pointer.CoordinateSet;
+import me.snover.spigot.TransferClient;
+import me.snover.spigot.config.CompositeTransferConfiguration;
+import me.snover.spigot.config.ResourceOptions;
+import me.snover.spigot.event.Events;
+import me.snover.spigot.messaging.PluginMessageSender;
+import me.snover.spigot.pointer.CoordinateContainer;
+import me.snover.spigot.pointer.CoordinateServerRegistry;
+import me.snover.spigot.pointer.CoordinateSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -22,6 +22,7 @@ import java.util.Set;
 /**
  * This class handles everything for the transfer command
  */
+//TODO move to bungeecord chat API
 public class CommandTransfer extends Command {
 
     //Commonly used messages

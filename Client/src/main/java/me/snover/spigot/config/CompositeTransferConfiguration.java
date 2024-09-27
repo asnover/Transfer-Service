@@ -1,8 +1,8 @@
-package me.snover.config;
+package me.snover.spigot.config;
 
 import com.google.common.base.Preconditions;
-import me.snover.pointer.CoordinateContainer;
-import me.snover.pointer.CoordinateServerRegistry;
+import me.snover.spigot.pointer.CoordinateContainer;
+import me.snover.spigot.pointer.CoordinateServerRegistry;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

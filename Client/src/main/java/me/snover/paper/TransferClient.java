@@ -1,9 +1,9 @@
-package me.snover;
+package me.snover.paper;
 
-import me.snover.command.CommandTransfer;
-import me.snover.config.CompositeTransferConfiguration;
-import me.snover.event.Events;
-import me.snover.pointer.CoordinateContainer;
+import me.snover.paper.command.CommandTransfer;
+import me.snover.paper.config.CompositeTransferConfiguration;
+import me.snover.paper.event.Events;
+import me.snover.paper.pointer.CoordinateContainer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;

@@ -1,4 +1,4 @@
-package me.snover;
+package me.snover.paper;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.velocitypowered.api.event.Subscribe;
@@ -6,10 +6,9 @@ import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.proxy.ConnectionRequestBuilder;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import me.snover.config.CompositeConfiguration;
+import me.snover.paper.config.CompositeConfiguration;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;

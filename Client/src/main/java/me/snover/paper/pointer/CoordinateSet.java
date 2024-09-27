@@ -1,4 +1,4 @@
-package me.snover.pointer;
+package me.snover.paper.pointer;
 
 /**
  * This class is a representation of a location in the world by use of its coordinates after being deserialized.

@@ -8,25 +8,24 @@ import me.snover.spigot.messaging.PluginMessageSender;
 import me.snover.spigot.pointer.CoordinateContainer;
 import me.snover.spigot.pointer.CoordinateServerRegistry;
 import me.snover.spigot.pointer.CoordinateSet;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 import java.util.Set;
 
 /**
  * This class handles everything for the transfer command
  */
-//TODO move to bungeecord chat API
 public class CommandTransfer extends Command {
 
     //Commonly used messages
-    final Component USAGE = Component.text("Usage:\n/transfer register\n/transfer edit-mode\n/transfer listservers\n/transfer remserver\n/transfer showcoord\n/transfer remcoord\n/transfer test\n/transfer setspawn\n/transfer toggleforcedspawn", NamedTextColor.RED);
+    /*final Component USAGE = Component.text("Usage:\n/transfer register\n/transfer edit-mode\n/transfer listservers\n/transfer remserver\n/transfer showcoord\n/transfer remcoord\n/transfer test\n/transfer setspawn\n/transfer toggleforcedspawn", NamedTextColor.RED);
     final Component REGISTER_USAGE = Component.text("Usage: /transfer register <server> <x> <y> <z> (Coordinates optional when used in-game. Server name is case sensitive!)", NamedTextColor.RED);
     final Component REMSERVER_USAGE = Component.text("Usage: /transfer remserver <server>", NamedTextColor.RED);
     final Component SHOWCOORD_USAGE = Component.text("Usage: /transfer showcoord <server>", NamedTextColor.RED);
@@ -34,7 +33,18 @@ public class CommandTransfer extends Command {
     final Component TEST_USAGE = Component.text("Usage: /transfer test <server> <player>", NamedTextColor.RED);
     final Component SET_SPAWN_USAGE = Component.text("Usage: /transfer setspawn <x> <y> <z> (coordinates optional when used in-game)", NamedTextColor.RED);
     final Component SERVER_NOT_FOUND = Component.text("Server not found in registry!", NamedTextColor.RED);
-    final Component DISALLOW = Component.text("Not Allowed!", NamedTextColor.RED);
+    final Component DISALLOW = Component.text("Not Allowed!", NamedTextColor.RED);*/
+
+    //Begin bungee chat component implementation
+    final TextComponent USAGE = new TextComponent("Usage:\n/transfer register\n/transfer edit-mode\n/transfer listservers\n/transfer remserver\n/transfer showcoord\n/transfer remcoord\n/transfer test\n/transfer setspawn\n/transfer toggleforcedspawn");
+    final TextComponent REGISTER_USAGE = new TextComponent("\"Usage: /transfer register <server> <x> <y> <z> (Coordinates optional when used in-game. Server name is case sensitive!)");
+    final TextComponent REMSERVER_USAGE = new TextComponent("Usage: /transfer remserver <server>");
+    final TextComponent SHOWCOORD_USAGE = new TextComponent("Usage: /transfer showcoord <server>");
+    final TextComponent REMCOORD_USAGE = new TextComponent("Usage: /transfer remcoord <server> <x> <y> <z>");
+    final TextComponent TEST_USAGE = new TextComponent("Usage: /transfer test <server> <player>");
+    final TextComponent SET_SPAWN_USAGE = new TextComponent("Usage: /transfer setspawn <x> <y> <z> (coordinates optional when used in-game)");
+    final TextComponent SERVER_NOT_FOUND = new TextComponent("Server not found in registry!");
+    final TextComponent DISALLOW = new TextComponent("Not Allowed!");
 
     @SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
     private CompositeTransferConfiguration config;
@@ -42,6 +52,15 @@ public class CommandTransfer extends Command {
         super("transfer");
         this.setDescription("Facilitates the use of the transfer plugin");
         this.config = config;
+        USAGE.setColor(ChatColor.RED);
+        REGISTER_USAGE.setColor(ChatColor.RED);
+        REMSERVER_USAGE.setColor(ChatColor.RED);
+        SHOWCOORD_USAGE.setColor(ChatColor.RED);
+        REMCOORD_USAGE.setColor(ChatColor.RED);
+        TEST_USAGE.setColor(ChatColor.RED);
+        SET_SPAWN_USAGE.setColor(ChatColor.RED);
+        SERVER_NOT_FOUND.setColor(ChatColor.RED);
+        DISALLOW.setColor(ChatColor.RED);
     }
 
     /**
@@ -101,7 +120,9 @@ public class CommandTransfer extends Command {
                 int x = player.getLocation().getBlockX();
                 int y = player.getLocation().getBlockY();
                 int z = player.getLocation().getBlockZ();
-                sender.sendMessage(Component.text("Registering a new coordinate set:" + "\nx: " + x + "\ny: " + y + "\nz: " + z, NamedTextColor.AQUA));
+                TextComponent registerMsg = new TextComponent("Registering a new coordinate set:" + "\nx: " + x + "\ny: " + y + "\nz: " + z);
+                registerMsg.setColor(ChatColor.AQUA);
+                sender.sendMessage(registerMsg);
                 container.addCoordinateSet(x, y, z);
                 CoordinateServerRegistry.add(tgtServer, container);
                 config.saveResources(false, true);
@@ -120,7 +141,9 @@ public class CommandTransfer extends Command {
                 y = Integer.parseInt(args[3]);
                 z = Integer.parseInt(args[4]);
             } catch(NumberFormatException e) {
-                sender.sendMessage(Component.text("Coordinates must contain only whole numbers!\n" + REGISTER_USAGE, NamedTextColor.RED));
+                TextComponent errorMsg = new TextComponent("Coordinates must contain only whole numbers!\n" + REGISTER_USAGE);
+                errorMsg.setColor(ChatColor.RED);
+                sender.sendMessage(errorMsg);
                 return false;
             }
 
@@ -155,7 +178,9 @@ public class CommandTransfer extends Command {
         final Set<String> REG = CoordinateServerRegistry.getRegisteredServers();
         int regSize = REG.size();
         if(regSize < 1) {
-            sender.sendMessage(Component.text("No servers registered.", NamedTextColor.AQUA));
+            TextComponent noServer = new TextComponent("No servers registered.");
+            noServer.setColor(ChatColor.AQUA);
+            sender.sendMessage(noServer);
             return true;
         }
 
@@ -168,7 +193,9 @@ public class CommandTransfer extends Command {
         /*for(int i = 0; i < regSize; i++) {
             builder.append("\n").append(REG.);
         }*/
-        sender.sendMessage(Component.text(builder.toString(), NamedTextColor.AQUA));
+        TextComponent serverListString = new TextComponent(builder.toString());
+        serverListString.setColor(ChatColor.AQUA);
+        sender.sendMessage(serverListString);
         return true;
     }
 
@@ -229,7 +256,9 @@ public class CommandTransfer extends Command {
             int setNumber = i + 1;
             builder.append("\nCoordinate Set ").append(setNumber).append(": ").append(coordinateSets[i].getX()).append(", ").append(coordinateSets[i].getY()).append(", ").append(coordinateSets[i].getZ());
         }
-        sender.sendMessage(Component.text(builder.toString(), NamedTextColor.AQUA));
+        TextComponent coordinateListString = new TextComponent(builder.toString());
+        coordinateListString.setColor(ChatColor.AQUA);
+        sender.sendMessage(coordinateListString);
         return true;
     }
 
@@ -252,7 +281,9 @@ public class CommandTransfer extends Command {
         }
         CoordinateServerRegistry.getContainer(args[1]).removeCoordinateSet(Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
         config.saveResources(false, true);
-        sender.sendMessage(Component.text("Removed coordinate set for server: " + args[1], NamedTextColor.AQUA));
+        TextComponent removedServer = new TextComponent("Removed coordinate set for server: " + args[1]);
+        removedServer.setColor(ChatColor.AQUA);
+        sender.sendMessage(removedServer);
         return true;
     }
 
@@ -277,7 +308,9 @@ public class CommandTransfer extends Command {
         Player tgtPlayer = TransferClient.getPlugin().getServer().getPlayerExact(args[2]);
         //May need to investigate warning of possible NullPointerException return.
         if(!tgtPlayer.isOnline()) {
-            sender.sendMessage(Component.text("Player is not online!", NamedTextColor.DARK_RED));
+            TextComponent notOnline = new TextComponent("Player is not online!");
+            notOnline.setColor(ChatColor.DARK_RED);
+            sender.sendMessage(notOnline);
             return false;
         }
 
@@ -293,6 +326,8 @@ public class CommandTransfer extends Command {
      */
     public boolean executeSetSpawn(CommandSender sender, String[] args) {
         //If sender is not player, check if there are enough arguments.
+        TextComponent spawnSet = new TextComponent("Spawn-point set.");
+        spawnSet.setColor(ChatColor.AQUA);
         if(!(sender instanceof Player player)) {
             if(args.length < 4) {
                 sender.sendMessage(SET_SPAWN_USAGE);
@@ -308,12 +343,14 @@ public class CommandTransfer extends Command {
                 y = Integer.parseInt(args[2]);
                 z = Integer.parseInt(args[3]);
             } catch(NumberFormatException e) {
-                sender.sendMessage(Component.text("Coordinates must be whole numbers!", NamedTextColor.RED));
+                TextComponent errMsg = new TextComponent("Coordinates must be whole numbers!");
+                errMsg.setColor(ChatColor.RED);
+                sender.sendMessage(errMsg);
                 return false;
             }
             ResourceOptions.spawnLocation = new Location(TransferClient.getPlugin().getServer().getWorlds().getFirst(), x, y, z);
             config.saveResources(true, false);
-            sender.sendMessage(Component.text("Spawn-point set.", NamedTextColor.AQUA));
+            sender.sendMessage(spawnSet);
             return true;
         }
 
@@ -324,7 +361,7 @@ public class CommandTransfer extends Command {
         }
         ResourceOptions.spawnLocation = player.getLocation();
         config.saveResources(true, false);
-        sender.sendMessage(Component.text("Spawn-point set.", NamedTextColor.AQUA));
+        sender.sendMessage(spawnSet);
         return true;
     }
 
@@ -341,10 +378,14 @@ public class CommandTransfer extends Command {
         }
         if(!ResourceOptions.forcedSpawn) {
             ResourceOptions.forcedSpawn = true;
-            sender.sendMessage(Component.text("Enabled forced spawning.", NamedTextColor.AQUA));
+            TextComponent enabled = new TextComponent("Enabled forced spawning.");
+            enabled.setColor(ChatColor.AQUA);
+            sender.sendMessage(enabled);
         } else {
             ResourceOptions.forcedSpawn = false;
-            sender.sendMessage(Component.text("Disabled forced spawning.", NamedTextColor.AQUA));
+            TextComponent disabled = new TextComponent("Disabled forced spawning.");
+            disabled.setColor(ChatColor.AQUA);
+            sender.sendMessage(disabled);
         }
         config.saveResources(true, false);
         return true;
@@ -364,15 +405,22 @@ public class CommandTransfer extends Command {
 
             if(!Events.isPlayerEditing(player)) {
                 Events.addEditingPlayer(player);
-                player.sendMessage(Component.text("Entered edit-mode.", NamedTextColor.AQUA));
+                TextComponent enter = new TextComponent("Entered edit-mode");
+                enter.setColor(ChatColor.AQUA);
+                player.sendMessage(enter);
                 return true;
             } else {
                 Events.removeEditingPlayer(player);
-                player.sendMessage(Component.text("Exited edit-mode.", NamedTextColor.AQUA));
+                TextComponent exit = new TextComponent("Exited edit-mode.");
+                exit.setColor(ChatColor.AQUA);
+                player.sendMessage(exit);
                 return true;
             }
         } else {
-            sender.sendMessage(Component.text("You must be a player to enter edit mode.", NamedTextColor.RED, TextDecoration.BOLD));
+            TextComponent notPlayer = new TextComponent("You must be a player to enter edit mode");
+            notPlayer.setColor(ChatColor.RED);
+            notPlayer.setBold(Boolean.TRUE);
+            sender.sendMessage(notPlayer);
             return false;
         }
     }

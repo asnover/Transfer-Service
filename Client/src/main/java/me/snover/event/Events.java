@@ -3,9 +3,9 @@ package me.snover.event;
 import me.snover.TransferClient;
 import me.snover.config.ResourceOptions;
 import me.snover.messaging.PluginMessageSender;
-import me.snover.pointer.CoordinateContainer;
-import me.snover.pointer.CoordinateServerRegistry;
-import me.snover.pointer.CoordinateSet;
+import me.snover.pointer.LocationContainer;
+import me.snover.pointer.LocationServerRegistry;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,28 +26,28 @@ public class Events implements Listener {
     final Timer lockTimeoutTimer = new Timer();
 
     /**
-     * This event decides whether to send the player to a server or not based on any matches made in the {@link CoordinateServerRegistry}
+     * This event decides whether to send the player to a server or not based on any matches made in the {@link LocationServerRegistry}
      * @param event
      */
     @SuppressWarnings("JavadocDeclaration")
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent event) {
         //noinspection DataFlowIssue
-        if(CoordinateServerRegistry.getRegisteredServers().isEmpty()) return;
+        if(LocationServerRegistry.getRegisteredServers().isEmpty()) return;
         Player player = event.getPlayer();
         if(playerLock.contains(player)) return;
         if(editingPlayer.contains(player)) return;
         int playerX = player.getLocation().getBlockX();
         int playerY = player.getLocation().getBlockY();
         int playerZ = player.getLocation().getBlockZ();
-        HashMap<String, CoordinateContainer> REG = CoordinateServerRegistry.getCoordinateServerRegistry();
+        HashMap<String, LocationContainer> REG = LocationServerRegistry.getLocationServerRegistry();
 
-        for(String server : CoordinateServerRegistry.getRegisteredServers()) {
-            CoordinateContainer container = REG.get(server);
+        for(String server : LocationServerRegistry.getRegisteredServers()) {
+            LocationContainer container = REG.get(server);
             if(container == null) return;
-            CoordinateSet[] set = container.getCoordinateSets();
-            for (CoordinateSet coordinateSet : set) {
-                if (playerX == coordinateSet.getX() && playerY == coordinateSet.getY() && playerZ == coordinateSet.getZ()) {
+            Location[] locations = container.getLocations();
+            for (Location location : locations) {
+                if (playerX == location.getX() && playerY == location.getY() && playerZ == location.getZ()) {
                     playerLock.add(player);
                     lockTimeoutTimer.schedule(new TimerTask() {
                         @Override

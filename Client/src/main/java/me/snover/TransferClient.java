@@ -3,7 +3,7 @@ package me.snover;
 import me.snover.command.CommandTransfer;
 import me.snover.config.CompositeTransferConfiguration;
 import me.snover.event.Events;
-import me.snover.pointer.CoordinateContainer;
+import me.snover.pointer.LocationContainer;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,7 +16,7 @@ public class TransferClient extends JavaPlugin {
     private static CompositeTransferConfiguration config;
 
     public TransferClient() {
-        ConfigurationSerialization.registerClass(CoordinateContainer.class);
+        ConfigurationSerialization.registerClass(LocationContainer.class);
     }
 
     @Override

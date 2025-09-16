@@ -33,10 +33,16 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent event) {
         //noinspection DataFlowIssue
-        if(CoordinateServerRegistry.getRegisteredServers().isEmpty()) return;
+        try {
+            if (CoordinateServerRegistry.getRegisteredServers().isEmpty()) return;
+        } catch (NullPointerException e) {
+            //No issues, just return because no list exists
+            return;
+        }
         Player player = event.getPlayer();
         if(playerLock.contains(player)) return;
         if(editingPlayer.contains(player)) return;
+        int playerDimId = player.getLocation().getWorld().getEnvironment().getId();
         int playerX = player.getLocation().getBlockX();
         int playerY = player.getLocation().getBlockY();
         int playerZ = player.getLocation().getBlockZ();
@@ -47,7 +53,8 @@ public class Events implements Listener {
             if(container == null) return;
             CoordinateSet[] set = container.getCoordinateSets();
             for (CoordinateSet coordinateSet : set) {
-                if (playerX == coordinateSet.getX() && playerY == coordinateSet.getY() && playerZ == coordinateSet.getZ()) {
+
+                if (playerDimId == coordinateSet.getID() && playerX == coordinateSet.getX() && playerY == coordinateSet.getY() && playerZ == coordinateSet.getZ()) {
                     playerLock.add(player);
                     lockTimeoutTimer.schedule(new TimerTask() {
                         @Override

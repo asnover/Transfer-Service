@@ -20,7 +20,7 @@ public class CoordinateContainer implements ConfigurationSerializable {
     private final List<CoordinateSet> COORDINATE_SET_LIST = new ArrayList<>();
 
     public CoordinateContainer(@NotNull final String SERVER_NAME) {
-        Preconditions.checkNotNull(SERVER_NAME);
+        Preconditions.checkNotNull(SERVER_NAME, "Cannot set a null entry");
         this.SERVER_NAME = SERVER_NAME;
     }
 
@@ -31,10 +31,10 @@ public class CoordinateContainer implements ConfigurationSerializable {
      * @param z
      */
     @SuppressWarnings("JavadocDeclaration")
-    public void addCoordinateSet(int x, int y, int z) {
+    public void addCoordinateSet(int id, int x, int y, int z) {
 
-        if(coordinateSetExists(x, y ,z)) return;
-        CoordinateSet set = new CoordinateSet(x, y, z);
+        if(coordinateSetExists(id, x, y ,z)) return;
+        CoordinateSet set = new CoordinateSet(id, x, y, z);
         COORDINATE_SET_LIST.add(set);
     }
 
@@ -45,16 +45,17 @@ public class CoordinateContainer implements ConfigurationSerializable {
      * @param z
      */
     @SuppressWarnings("JavadocDeclaration")
-    public void removeCoordinateSet(int x, int y, int z) {
+    public void removeCoordinateSet(int id, int x, int y, int z) {
 
-        if(!coordinateSetExists(x, y, z)) return;
+        if(!coordinateSetExists(id, x, y, z)) return;
         for(int i = 0; i < COORDINATE_SET_LIST.size(); i++) {
             CoordinateSet coordinateSet = COORDINATE_SET_LIST.get(i);
+            int idFromSet = coordinateSet.getID();
             int xFromSet = coordinateSet.getX();
             int yFromSet = coordinateSet.getY();
             int zFromSet = coordinateSet.getZ();
 
-            if(xFromSet == x && yFromSet == y && zFromSet == z) {
+            if(idFromSet == id && xFromSet == x && yFromSet == y && zFromSet == z) {
                 COORDINATE_SET_LIST.remove(i);
                 return;
             }
@@ -79,13 +80,14 @@ public class CoordinateContainer implements ConfigurationSerializable {
      * @return Returns {@code true} if the coordinate set exists.
      */
     @SuppressWarnings("JavadocDeclaration")
-    public boolean coordinateSetExists(int x, int y, int z) {
+    public boolean coordinateSetExists(int id, int x, int y, int z) {
         for (CoordinateSet coordinateSet : COORDINATE_SET_LIST) {
+            int idFromSet = coordinateSet.getID();
             int xFromSet = coordinateSet.getX();
             int yFromSet = coordinateSet.getY();
             int zFromSet = coordinateSet.getZ();
 
-            if (xFromSet == x && yFromSet == y && zFromSet == z) return true;
+            if (idFromSet == id && xFromSet == x && yFromSet == y && zFromSet == z) return true;
         }
         return false;
     }
@@ -106,7 +108,7 @@ public class CoordinateContainer implements ConfigurationSerializable {
         data.put("size", COORDINATE_SET_LIST.size());
         for(int i = 0; i < COORDINATE_SET_LIST.size(); i++) {
             CoordinateSet set = COORDINATE_SET_LIST.get(i);
-            data.put("set" + i, set.getX() + "_" + set.getY() + "_" + set.getZ());
+            data.put("set" + i, set.getID() + "_" + set.getX() + "_" + set.getY() + "_" + set.getZ());
         }
         return data;
     }
@@ -118,7 +120,13 @@ public class CoordinateContainer implements ConfigurationSerializable {
         for(int i = 0; i < size; i++) {
             String coords = (String) data.get("set" + i);
             String[] split = coords.split("_");
-            container.addCoordinateSet(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+            int id;
+
+            //reverse compatibility
+            if(split.length < 4) id = 0;
+            else id = Integer.parseInt(split[0]);
+
+            container.addCoordinateSet(id, Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
         }
         return container;
     }

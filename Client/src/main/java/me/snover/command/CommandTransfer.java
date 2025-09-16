@@ -29,7 +29,7 @@ public class CommandTransfer extends Command {
     final Component REGISTER_USAGE = Component.text("Usage: /transfer register <server> <x> <y> <z> (Coordinates optional when used in-game. Server name is case sensitive!)", NamedTextColor.RED);
     final Component REMSERVER_USAGE = Component.text("Usage: /transfer remserver <server>", NamedTextColor.RED);
     final Component SHOWCOORD_USAGE = Component.text("Usage: /transfer showcoord <server>", NamedTextColor.RED);
-    final Component REMCOORD_USAGE = Component.text("Usage: /transfer remcoord <server> <x> <y> <z>", NamedTextColor.RED);
+    final Component REMCOORD_USAGE = Component.text("Usage: /transfer remcoord <server> <dimension> <x> <y> <z>", NamedTextColor.RED);
     final Component TEST_USAGE = Component.text("Usage: /transfer test <server> <player>", NamedTextColor.RED);
     final Component SET_SPAWN_USAGE = Component.text("Usage: /transfer setspawn <x> <y> <z> (coordinates optional when used in-game)", NamedTextColor.RED);
     final Component SERVER_NOT_FOUND = Component.text("Server not found in registry!", NamedTextColor.RED);
@@ -97,11 +97,13 @@ public class CommandTransfer extends Command {
                 if(CoordinateServerRegistry.exists(tgtServer)) container = CoordinateServerRegistry.getContainer(tgtServer);
                 else container = new CoordinateContainer(tgtServer);
 
+                //Dimension ID
+                int id = player.getWorld().getEnvironment().getId();
                 int x = player.getLocation().getBlockX();
                 int y = player.getLocation().getBlockY();
                 int z = player.getLocation().getBlockZ();
                 sender.sendMessage(Component.text("Registering a new coordinate set:" + "\nx: " + x + "\ny: " + y + "\nz: " + z, NamedTextColor.AQUA));
-                container.addCoordinateSet(x, y, z);
+                container.addCoordinateSet(id, x, y, z);
                 CoordinateServerRegistry.add(tgtServer, container);
                 config.saveResources(false, true);
                 return true;
@@ -128,7 +130,7 @@ public class CommandTransfer extends Command {
                 container = CoordinateServerRegistry.getContainer(tgtServer);
             } else container = new CoordinateContainer(tgtServer);
 
-            container.addCoordinateSet(x, y, z);
+            container.addCoordinateSet(0, x, y, z);
             CoordinateServerRegistry.add(tgtServer, container);
             config.saveResources(false, true);
             return true;
@@ -150,6 +152,10 @@ public class CommandTransfer extends Command {
                 player.sendMessage(DISALLOW);
                 return false;
             }
+        }
+        if(CoordinateServerRegistry.getRegisteredServers() == null) {
+            sender.sendMessage(Component.text("No servers registered.", NamedTextColor.AQUA));
+            return true;
         }
         final Set<String> REG = CoordinateServerRegistry.getRegisteredServers();
         int regSize = REG.size();
@@ -226,7 +232,7 @@ public class CommandTransfer extends Command {
         builder.append("All coordinates associated with ").append(args[1]).append(":");
         for(int i = 0; i < coordinateSets.length; i++) {
             int setNumber = i + 1;
-            builder.append("\nCoordinate Set ").append(setNumber).append(": ").append(coordinateSets[i].getX()).append(", ").append(coordinateSets[i].getY()).append(", ").append(coordinateSets[i].getZ());
+            builder.append("\nCoordinate Set ").append(setNumber).append(": ").append("dimension ID: ").append(coordinateSets[i].getID()).append(", ").append(coordinateSets[i].getX()).append(", ").append(coordinateSets[i].getY()).append(", ").append(coordinateSets[i].getZ());
         }
         sender.sendMessage(Component.text(builder.toString(), NamedTextColor.AQUA));
         return true;
@@ -249,7 +255,11 @@ public class CommandTransfer extends Command {
             sender.sendMessage(REMCOORD_USAGE);
             return false;
         }
-        CoordinateServerRegistry.getContainer(args[1]).removeCoordinateSet(Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
+        int id;
+        if(args[2].contains("nether") || args[2].equals("-1")) id = -1;
+        else if (args[2].contains("end") || args[2].equals("1")) id = 1;
+        else id = 0;
+        CoordinateServerRegistry.getContainer(args[1]).removeCoordinateSet(id, Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]));
         config.saveResources(false, true);
         sender.sendMessage(Component.text("Removed coordinate set for server: " + args[1], NamedTextColor.AQUA));
         return true;

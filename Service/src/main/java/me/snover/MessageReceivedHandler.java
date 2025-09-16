@@ -9,6 +9,7 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 import me.snover.config.CompositeConfiguration;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -30,7 +31,6 @@ public class MessageReceivedHandler {
      * When a plugin message is received, process and transfer the player.
      * @param event Handles the {@link PluginMessageEvent}
      */
-    @SuppressWarnings("unused")
     @Subscribe()
     public void onMessageReceived(PluginMessageEvent event) {
         String id = event.getIdentifier().getId();
@@ -54,7 +54,7 @@ public class MessageReceivedHandler {
                     server = PLUGIN.getProxyServer().getServer(serverName).get();
                 } else {
                     player.sendMessage(Component.text("Unable to send you to the server.\n" + serverName + " is not a server name that is registered with the proxy.\nPlease contact your server adminstrator.", NamedTextColor.RED));
-                    PLUGIN.getLogger().warn(serverName, " is not a server name that is registered with the proxy.");
+                    PLUGIN.getLogger().warn(serverName + " is not a server name that is registered with the proxy.");
                     PluginMessageEvent.ForwardResult.handled();
                     return;
                 }
@@ -64,7 +64,7 @@ public class MessageReceivedHandler {
                 CompletableFuture<ConnectionRequestBuilder.Result> result = conReq.connect();
                 try {
                     if(!result.get().isSuccessful()) {
-                        PLUGIN.getLogger().error("Attempted to connect {} to {} but the attempt was unsuccessful", playerName, serverName);
+                        PLUGIN.getLogger().error("Attempted to connect " + playerName + " to " + serverName + " but the attempt was unsuccessful");
                         Component reason;
                         if(result.get().getReasonComponent().isPresent()) {
                             reason = result.get().getReasonComponent().get();
@@ -75,7 +75,7 @@ public class MessageReceivedHandler {
                         }
                     }
                 } catch (InterruptedException | ExecutionException e) {
-                    PLUGIN.getLogger().error("Error upon getting result for player connection!\n{}\n(Player was {})\n(Server was {})\n(Current server is {})", e.getMessage(), playerName, serverName, player.getCurrentServer().get().getServerInfo().getName());
+                    PLUGIN.getLogger().error("Error upon getting result for player connection!\n" + e.getMessage() + "\n(Player was " + playerName + ")\n(Server was " + serverName + ")\n(Current server is " + player.getCurrentServer().get().getServerInfo().getName() + ")");
                     player.sendMessage(Component.text("An error occurred attempting to connect you to the server.\n", NamedTextColor.RED));
                 } finally {
                     PluginMessageEvent.ForwardResult.handled();

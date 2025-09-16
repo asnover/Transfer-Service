@@ -44,7 +44,7 @@ public class TransferService {
      * @param event The event that is fired to initialize the plugin
      */
     @Subscribe
-    public void onProxyInitialization(@SuppressWarnings("unused") ProxyInitializeEvent event) {
+    public void onProxyInitialization(ProxyInitializeEvent event) {
         SERVER.getEventManager().register(this, new MessageReceivedHandler(this));
         SERVER.getChannelRegistrar().register(MinecraftChannelIdentifier.create("transfers", "main"));
         try {

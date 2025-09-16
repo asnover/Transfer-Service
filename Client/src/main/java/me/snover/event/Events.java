@@ -23,7 +23,7 @@ public class Events implements Listener {
 
     private static final List<Player> playerLock = new ArrayList<>();
     private static final List<Player> editingPlayer = new ArrayList<>();
-    final Timer lockTimeoutTimer = new Timer();
+    Timer lockTimeoutTimer = new Timer();
 
     /**
      * This event decides whether to send the player to a server or not based on any matches made in the {@link CoordinateServerRegistry}

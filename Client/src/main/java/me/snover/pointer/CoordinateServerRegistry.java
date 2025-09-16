@@ -22,7 +22,7 @@ public class CoordinateServerRegistry {
         TransferClient.getPlugin().getLogger().info("New coordinate/server association registered");
     }
 
-    @Deprecated(since = "1.1.2")
+    @Deprecated(forRemoval = true)
     public static void add(CoordinateContainer container) {
         add(container.getServerName(), container);
     }

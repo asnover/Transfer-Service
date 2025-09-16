@@ -1,8 +1,8 @@
 package me.snover.config;
 
 import com.google.common.base.Preconditions;
-import me.snover.pointer.LocationContainer;
-import me.snover.pointer.LocationServerRegistry;
+import me.snover.pointer.CoordinateContainer;
+import me.snover.pointer.CoordinateServerRegistry;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -80,8 +80,8 @@ public class CompositeTransferConfiguration {
                 Set<String> containers = coordSection.getKeys(false);
                 for(String serverKey : containers) {
                     plugin.getLogger().info(serverKey);
-                    LocationContainer container = (LocationContainer) coordSection.get(serverKey);
-                    LocationServerRegistry.update(serverKey, container);
+                    CoordinateContainer container = (CoordinateContainer) coordSection.get(serverKey);
+                    CoordinateServerRegistry.add(serverKey, container);
                 }
             }
         }
@@ -128,9 +128,9 @@ public class CompositeTransferConfiguration {
 
             ConfigurationSection containerSection = data.getConfigurationSection("coordinatecontainers");
 
-            for(String server : Objects.requireNonNull(LocationServerRegistry.getRegisteredServers())) {
+            for(String server : Objects.requireNonNull(CoordinateServerRegistry.getRegisteredServers())) {
                 if (containerSection != null) {
-                    containerSection.set(server, LocationServerRegistry.getContainer(server));
+                    containerSection.set(server, CoordinateServerRegistry.getContainer(server));
                 }
             }
 

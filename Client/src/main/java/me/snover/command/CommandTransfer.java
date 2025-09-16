@@ -5,12 +5,12 @@ import me.snover.config.CompositeTransferConfiguration;
 import me.snover.config.ResourceOptions;
 import me.snover.event.Events;
 import me.snover.messaging.PluginMessageSender;
-import me.snover.pointer.LocationContainer;
-import me.snover.pointer.LocationServerRegistry;
+import me.snover.pointer.CoordinateContainer;
+import me.snover.pointer.CoordinateServerRegistry;
+import me.snover.pointer.CoordinateSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -61,8 +61,8 @@ public class CommandTransfer extends Command {
         if(args[0].equalsIgnoreCase("edit-mode")) return executeEditMode(sender);
         if(args[0].equalsIgnoreCase("listservers")) return executeListServers(sender);
         if(args[0].equalsIgnoreCase("remserver")) return executeRemServer(sender, args);
-        if(args[0].equalsIgnoreCase("showcoord")) return executeShowLoc(sender, args);
-        if(args[0].equalsIgnoreCase("remcoord"))  return executeRemLoc(sender, args);
+        if(args[0].equalsIgnoreCase("showcoord")) return executeShowCoord(sender, args);
+        if(args[0].equalsIgnoreCase("remcoord"))  return executeRemCoord(sender, args);
         if(args[0].equalsIgnoreCase("test")) return executeTest(sender, args);
         if(args[0].equalsIgnoreCase("setspawn")) return executeSetSpawn(sender, args);
         if(args[0].equalsIgnoreCase("toggleforcedspawn")) return executeToggleForcedSpawn(sender);
@@ -93,16 +93,16 @@ public class CommandTransfer extends Command {
                     return false;
                 }
 
-                LocationContainer container;
-                if(LocationServerRegistry.exists(tgtServer)) container = LocationServerRegistry.getContainer(tgtServer);
-                else container = new LocationContainer(tgtServer);
+                CoordinateContainer container;
+                if(CoordinateServerRegistry.exists(tgtServer)) container = CoordinateServerRegistry.getContainer(tgtServer);
+                else container = new CoordinateContainer(tgtServer);
 
                 int x = player.getLocation().getBlockX();
                 int y = player.getLocation().getBlockY();
                 int z = player.getLocation().getBlockZ();
                 sender.sendMessage(Component.text("Registering a new coordinate set:" + "\nx: " + x + "\ny: " + y + "\nz: " + z, NamedTextColor.AQUA));
-                container.addLocation(player.getLocation());
-                LocationServerRegistry.update(tgtServer, container);
+                container.addCoordinateSet(x, y, z);
+                CoordinateServerRegistry.add(tgtServer, container);
                 config.saveResources(false, true);
                 return true;
             }
@@ -123,13 +123,13 @@ public class CommandTransfer extends Command {
                 return false;
             }
 
-            LocationContainer container;
-            if(LocationServerRegistry.exists(tgtServer)) {
-                container = LocationServerRegistry.getContainer(tgtServer);
-            } else container = new LocationContainer(tgtServer);
+            CoordinateContainer container;
+            if(CoordinateServerRegistry.exists(tgtServer)) {
+                container = CoordinateServerRegistry.getContainer(tgtServer);
+            } else container = new CoordinateContainer(tgtServer);
 
-            container.addLocation(TransferClient.getPlugin().getServer().getWorlds().getFirst(), x, y, z);
-            LocationServerRegistry.update(tgtServer, container);
+            container.addCoordinateSet(x, y, z);
+            CoordinateServerRegistry.add(tgtServer, container);
             config.saveResources(false, true);
             return true;
         }
@@ -151,7 +151,7 @@ public class CommandTransfer extends Command {
                 return false;
             }
         }
-        final Set<String> REG = LocationServerRegistry.getRegisteredServers();
+        final Set<String> REG = CoordinateServerRegistry.getRegisteredServers();
         if(REG.isEmpty()) {
             sender.sendMessage(Component.text("No servers registered.", NamedTextColor.AQUA));
             return true;
@@ -187,11 +187,11 @@ public class CommandTransfer extends Command {
             sender.sendMessage(REMSERVER_USAGE);
             return false;
         }
-        if(!LocationServerRegistry.exists(args[1])) {
+        if(!CoordinateServerRegistry.exists(args[1])) {
             sender.sendMessage(SERVER_NOT_FOUND);
             return false;
         }
-        LocationServerRegistry.remove(args[1]);
+        CoordinateServerRegistry.remove(args[1]);
         config.saveResources(true, true);
         return true;
     }
@@ -202,7 +202,7 @@ public class CommandTransfer extends Command {
      * @param args The command arguments
      * @return Returns {@code true} if command successful
      */
-    private boolean executeShowLoc(CommandSender sender, String[] args) {
+    private boolean executeShowCoord(CommandSender sender, String[] args) {
         if(sender instanceof Player player) {
             if(!player.isOp() && !player.hasPermission("transferclient.transfer.showcoord")) {
                 player.sendMessage(DISALLOW);
@@ -214,18 +214,18 @@ public class CommandTransfer extends Command {
             sender.sendMessage(SHOWCOORD_USAGE);
             return false;
         }
-        if(!LocationServerRegistry.exists(args[1])) {
+        if(!CoordinateServerRegistry.exists(args[1])) {
             sender.sendMessage(SERVER_NOT_FOUND);
             return false;
         }
 
-        LocationContainer container = LocationServerRegistry.getContainer(args[1]);
-        Location[] locations = container.getLocations();
+        CoordinateContainer container = CoordinateServerRegistry.getContainer(args[1]);
+        CoordinateSet[] coordinateSets = container.getCoordinateSets();
         StringBuilder builder = new StringBuilder();
         builder.append("All coordinates associated with ").append(args[1]).append(":");
-        for(int i = 0; i < locations.length; i++) {
+        for(int i = 0; i < coordinateSets.length; i++) {
             int setNumber = i + 1;
-            builder.append("\nCoordinate Set ").append(setNumber).append(": ").append(locations[i].getX()).append(", ").append(locations[i].getY()).append(", ").append(locations[i].getZ());
+            builder.append("\nCoordinate Set ").append(setNumber).append(": ").append(coordinateSets[i].getX()).append(", ").append(coordinateSets[i].getY()).append(", ").append(coordinateSets[i].getZ());
         }
         sender.sendMessage(Component.text(builder.toString(), NamedTextColor.AQUA));
         return true;
@@ -237,7 +237,7 @@ public class CommandTransfer extends Command {
      * @param args The command arguments (Arguments MUST NOT be modified)
      * @return Returns {@code true} if command successful
      */
-    private boolean executeRemLoc(CommandSender sender, String[] args) {
+    private boolean executeRemCoord(CommandSender sender, String[] args) {
         if(sender instanceof Player player) {
             if (!player.isOp() && !player.hasPermission("transferclient.transfer.remcoord")) {
                 player.sendMessage(DISALLOW);
@@ -248,7 +248,7 @@ public class CommandTransfer extends Command {
             sender.sendMessage(REMCOORD_USAGE);
             return false;
         }
-        LocationServerRegistry.getContainer(args[1]).removeLocation(new Location(TransferClient.getPlugin().getServer().getWorlds().getFirst(), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+        CoordinateServerRegistry.getContainer(args[1]).removeCoordinateSet(Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
         config.saveResources(false, true);
         sender.sendMessage(Component.text("Removed coordinate set for server: " + args[1], NamedTextColor.AQUA));
         return true;

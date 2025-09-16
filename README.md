@@ -59,6 +59,6 @@ secret = "SecretKeyHere"
 
 Features to come in the future:
 - [x] ~~Permission Support~~ (Added in 1.1.0)
-- [ ] Allow more world teleportation options than just the overworld and the default world folder.
+- [ ] Allow more dimension teleportation options than just the overworld.
 - [ ] Add Redis support
 - [ ] Add SQL support
